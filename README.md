@@ -26,6 +26,29 @@ Wireless Telemetry Module 2
 Linux machine, running python script
 ```
 
+## Usage:
+
+Load `teensyHub.ino` into the main teensy.
+Load `teensyLeaf.ino` into a teensy that is publishing the data
+
+connect the radios
+
+run 
+```
+python3 -i main.py [--port PORT]
+```
+where `PORT` is the port at which the radio is connected. Usually the default is `/dev/ttyUSB0`. This is the default value used, if the port number is not specified. 
+
+This should launch a GUI which starts plotting the data it receives!
+
+To get a list of available ports, run
+```
+python -m serial.tools.list_ports
+```
+
+When 
+
+
 ## Details
  
 The messages to be sent are encoded and decoded using COBS.
