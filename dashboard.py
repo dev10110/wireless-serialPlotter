@@ -94,10 +94,6 @@ class Dashboard:
   def firstPlot(self):
     # dummy data
     t = np.array([0])
-    y1 = np.sin(t)
-    y2 = np.cos(t)
-    y3 = np.sin(2*t)
-    y4 = np.cos(2*t)
 
     
     # create the data arrays
@@ -135,7 +131,7 @@ class Dashboard:
 
     
     
-    # create the plots
+    # # create the plots
     self.plot_rpm_DL_val = self.plot_rpm_L.plot(self.DL_t, self.DL_rpm_val, pen=self.penRedSolid)
     self.plot_rpm_DL_cmd = self.plot_rpm_L.plot(self.DL_t, self.DL_rpm_cmd, pen=self.penRedDashed)
     
@@ -149,15 +145,50 @@ class Dashboard:
 
     
     self.plot_current_DL_val = self.plot_current_L.plot(self.DL_t, self.DL_rpm_val, pen=self.penRedSolid)
-    self.plot_current_DL_cmd = self.plot_current_L.plot(t, 2*y3, pen=self.penRedDashed)
+    self.plot_current_DL_cmd = self.plot_current_L.plot(self.DL_t, self.DL_rpm_cmd, pen=self.penRedDashed)
 
-    self.plot_current_WL_val = self.plot_current_W.plot(t, y3,pen=self.penRedSolid)
-    self.plot_current_WL_cmd = self.plot_current_W.plot(t, 2*y3, pen=self.penRedDashed)
-    self.plot_current_WR_val = self.plot_current_W.plot(t, y4,pen=self.penBlueSolid)
-    self.plot_current_WR_cmd = self.plot_current_W.plot(t, 2*y4, pen=self.penBlueDashed)
+    self.plot_current_WL_val = self.plot_current_W.plot(self.WL_t, self.WL_current_val,pen=self.penRedSolid)
+    self.plot_current_WL_cmd = self.plot_current_W.plot(self.WL_t, self.WL_current_cmd,pen=self.penRedDashed)
+    self.plot_current_WR_val = self.plot_current_W.plot(self.WR_t, self.WR_current_val ,pen=self.penBlueSolid)
+    self.plot_current_WR_cmd = self.plot_current_W.plot(self.WR_t, self.WR_current_cmd, pen=self.penBlueDashed)
 
-    self.plot_current_DR_val = self.plot_current_R.plot(t, y4,pen=self.penBlueSolid)
-    self.plot_current_DR_cmd = self.plot_current_R.plot(t, 2*y4, pen=self.penBlueDashed)
+    self.plot_current_DR_val = self.plot_current_R.plot(self.DR_t, self.DR_current_val,pen=self.penBlueSolid)
+    self.plot_current_DR_cmd = self.plot_current_R.plot(self.DR_t, self.DR_current_cmd, pen=self.penBlueDashed)
+
+    # RESET to not have data
+
+    self.DL_t = np.array([])
+    self.DL_rpm_val =np.array([])
+    self.DL_rpm_cmd = np.array([])
+    self.DL_current_val =np.array([])
+    self.DL_current_cmd = np.array([])
+    self.DL_voltage = np.array([])
+    self.DL_temp =np.array([])
+
+    self.DR_t = np.array([])
+    self.DR_rpm_val =np.array([])
+    self.DR_rpm_cmd = np.array([])
+    self.DR_current_val =np.array([])
+    self.DR_current_cmd = np.array([])
+    self.DR_voltage = np.array([])
+    self.DR_temp =np.array([])
+
+    self.WL_t = np.array([])
+    self.WL_rpm_val =np.array([])
+    self.WL_rpm_cmd = np.array([])
+    self.WL_current_val =np.array([])
+    self.WL_current_cmd = np.array([])
+    self.WL_voltage = np.array([])
+    self.WL_temp =np.array([])
+
+    self.WR_t = np.array([])
+    self.WR_rpm_val =np.array([])
+    self.WR_rpm_cmd = np.array([])
+    self.WR_current_val =np.array([])
+    self.WR_current_cmd = np.array([])
+    self.WR_voltage = np.array([])
+    self.WR_temp =np.array([])
+
 
   def testUpdate(self):
 
@@ -187,25 +218,32 @@ class Dashboard:
     self.plot_current_WR_cmd.setData(x=self.WR_t, y= self.WR_current_cmd)
 
     # update text
-    self.label_rpm_DL.setText(f"{self.DL_rpm_val[-1]: .1f} ({self.DL_rpm_cmd[-1]: .1f})")
-    self.label_rpm_DR.setText(f"{self.DR_rpm_val[-1]: .1f} ({self.DR_rpm_cmd[-1]: .1f})")
-    self.label_rpm_WL.setText(f"{self.WL_rpm_val[-1]: .1f} ({self.WL_rpm_cmd[-1]: .1f})")
-    self.label_rpm_WR.setText(f"{self.WR_rpm_val[-1]: .1f} ({self.WR_rpm_cmd[-1]: .1f})")
 
-    self.label_current_DL.setText(f"{self.DL_current_val[-1]: .1f} ({self.DL_current_cmd[-1]: .1f})")
-    self.label_current_DR.setText(f"{self.DR_current_val[-1]: .1f} ({self.DR_current_cmd[-1]: .1f})")
-    self.label_current_WL.setText(f"{self.WL_current_val[-1]: .1f} ({self.WL_current_cmd[-1]: .1f})")
-    self.label_current_WR.setText(f"{self.WR_current_val[-1]: .1f} ({self.WR_current_cmd[-1]: .1f})")
+    if len(self.DL_t) > 0:
+        self.label_rpm_DL.setText(f"{self.DL_rpm_val[-1]: .1f} ({self.DL_rpm_cmd[-1]: .1f})")
+        self.label_current_DL.setText(f"{self.DL_current_val[-1]: .1f} ({self.DL_current_cmd[-1]: .1f})")
+        self.label_volt_DL.setText(f"{self.DL_voltage[-1]: .1f}")
+        self.label_temp_DL.setText(f"{self.DL_temp[-1]: .1f}", color=("#000" if self.DL_temp[-1] < self.warnTemp else "#F00"))
 
-    self.label_volt_DL.setText(f"{self.DL_voltage[-1]: .1f}")
-    self.label_volt_DR.setText(f"{self.DR_voltage[-1]: .1f}")
-    self.label_volt_WL.setText(f"{self.WL_voltage[-1]: .1f}")
-    self.label_volt_WR.setText(f"{self.WR_voltage[-1]: .1f}")
+    if len(self.DR_t) > 0:
 
-    self.label_temp_DL.setText(f"{self.DL_temp[-1]: .1f}", color=("#000" if self.DL_temp[-1] < self.warnTemp else "#F00"))
-    self.label_temp_DR.setText(f"{self.DR_temp[-1]: .1f}", color=("#000" if self.DR_temp[-1] < self.warnTemp else "#F00"))
-    self.label_temp_WL.setText(f"{self.WL_temp[-1]: .1f}", color=("#000" if self.WL_temp[-1] < self.warnTemp else "#F00"))
-    self.label_temp_WR.setText(f"{self.WR_temp[-1]: .1f}", color=("#000" if self.WR_temp[-1] < self.warnTemp else "#F00"))
+
+        self.label_rpm_DR.setText(f"{self.DR_rpm_val[-1]: .1f} ({self.DR_rpm_cmd[-1]: .1f})")
+        self.label_current_DR.setText(f"{self.DR_current_val[-1]: .1f} ({self.DR_current_cmd[-1]: .1f})")
+        self.label_volt_DR.setText(f"{self.DR_voltage[-1]: .1f}")
+        self.label_temp_DR.setText(f"{self.DR_temp[-1]: .1f}", color=("#000" if self.DR_temp[-1] < self.warnTemp else "#F00"))
+
+    if len(self.WL_t) > 0:
+        self.label_rpm_WL.setText(f"{self.WL_rpm_val[-1]: .1f} ({self.WL_rpm_cmd[-1]: .1f})")
+        self.label_current_WL.setText(f"{self.WL_current_val[-1]: .1f} ({self.WL_current_cmd[-1]: .1f})")
+        self.label_volt_WL.setText(f"{self.WL_voltage[-1]: .1f}")
+        self.label_temp_WL.setText(f"{self.WL_temp[-1]: .1f}", color=("#000" if self.WL_temp[-1] < self.warnTemp else "#F00"))
+   
+    if len(self.WR_t) > 0:
+        self.label_rpm_WR.setText(f"{self.WR_rpm_val[-1]: .1f} ({self.WR_rpm_cmd[-1]: .1f})")
+        self.label_current_WR.setText(f"{self.WR_current_val[-1]: .1f} ({self.WR_current_cmd[-1]: .1f})")
+        self.label_volt_WR.setText(f"{self.WR_voltage[-1]: .1f}")
+        self.label_temp_WR.setText(f"{self.WR_temp[-1]: .1f}", color=("#000" if self.WR_temp[-1] < self.warnTemp else "#F00"))
 
     # this is what actually updates the plot
     self.app.processEvents()
@@ -213,7 +251,7 @@ class Dashboard:
   # insert a data point into an array
   def insertData(self, arr, d):
     
-    if len(arr) < 100:
+    if len(arr) < 50:
       return np.append(arr, d)
       
     arr = np.roll(arr, -1)
